@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body class=" bg-primary">
+    <div class="container">
+        <h1 class="text-center m-5"> Know More About Countries</h1>
+        <div class="text-center m-5">
+            <input type="text" placeholder="Search By Country Name" class="w-50 border rounded" id="userinput"/>
+            <button class="bg-white  border-0 rounded" type="button" onclick="search()">
+                <i class="fa-solid fa-magnifying-glass "></i>
+            </button>
+        </div> 
+        <div id="result"class="text-center w-25 m-auto" >
+            
+        </div>  
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/ca5f397bae.js" crossorigin="anonymous"></script>
+<script>
+    const search = async ()=>{
+        let searchKey=userinput.value
+        if(searchKey){
+                const country =await fetch(`https://restcountries.com/v3.1/name/${searchKey}?fullText=true`)
+                const response =await country.json()
+                const currency=response[0].currencies
+                const countryCode=Object.keys(currency)
+                const curr=currency[countryCode[0]]
+                const lang=response[0].languages
+                const langs=Object.values(lang)
+                const alllangs=langs.join(',')
+                console.log(alllangs)
+                result.innerHTML=`<div class="card" style="width: 18rem;">
+                <img src=${response[0].flags.png} class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">${response[0].name.common}</h5>
+                </div>
+                <ul class="list-group list-group-flush text-center">
+                  <li class="list-group-item ">Capital:${response[0].capital}</li>
+                  <li class="list-group-item ">Population:${response[0].population}</li>
+                  <li class="list-group-item">Timezone:${response[0].timezones}</li>
+                  <li class="list-group-item">Continent:${response[0].continents}</li>
+                  <li class="list-group-item">Currency:${curr.symbol},${curr.name}</li>
+                  <li class="list-group-item">Languages:${alllangs}</li>
+
+                </ul>
+                <div class="card-body">
+                  <a href="${response[0].maps.googleMaps}" class="card-link">Location in map</a>
+                </div>
+              </div>
+`
+            
+        }else{
+            alert('please enter valid input')
+        }
+
+    }
+
+</script>
+</html>
